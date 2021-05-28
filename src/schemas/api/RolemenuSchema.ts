@@ -1,0 +1,312 @@
+import * as bcrypt from 'bcrypt-nodejs';
+import * as mongoose from 'mongoose';
+
+import { Rolemenu } from '../../models/api/RolemenuModel';
+import { CommonUtil } from '../../common/common';
+
+type RolemenuDocument = mongoose.Document & Rolemenu;
+
+
+const rolemenuSchema = new mongoose.Schema({
+    rolemenuId: { type: String, unique: true, default: CommonUtil.getUuid() },
+    roleId: String,
+    menuId: String,
+    name: String,
+    title: String,
+    pid: String,
+    path: String,
+    icon: String,
+    display: { type: Number, default: 1 },
+    hidden: { type: Boolean, default: true },
+    sort: Number,
+    isaction: Number,
+    meta: Object,
+    isDeleted: { type: Number, default: 0 }
+}, {
+    timestamps: true
+})
+
+const rolemenuRepository = mongoose.model<RolemenuDocument>('Rolemenu', rolemenuSchema);
+
+const initDatas: Rolemenu[] = [
+    {
+        rolemenuId: "1",
+        roleId: "1",
+        menuId: "1",
+        pid: "0",
+        name: '系统设置',
+        title: '系统设置',
+        path: 'system',
+        icon: "clipboard",
+        display: 1,
+        hidden: false,
+        sort: 1,
+        isaction: 0,
+        meta: {title: "系统设置", icon: "clipboard"},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "2",
+        roleId: "1",
+        menuId: "11",
+        pid: '1',
+        name: '用户',
+        title: '用户',
+        path: 'user',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 1,
+        isaction: 0,
+        meta: {title: "用户", icon: ""},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "3",
+        roleId: "1",
+        menuId: "111",
+        pid: '11',
+        name: '添加用户',
+        title: '添加用户',
+        path: 'user/addsystemuser',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 1,
+        isaction: 1,
+        meta: {title: "添加用户", icon: ""},
+        isDeleted: 0
+    },    
+    {
+        rolemenuId: "4",
+        roleId: "1",
+        menuId: "112",
+        pid: '11',
+        name: '编辑用户',
+        title: '编辑用户',
+        path: 'user/editsystemuser',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 2,
+        isaction: 1,
+        meta: {title: "编辑用户", icon: ""},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "5",
+        roleId: "1",
+        menuId: "113",
+        pid: '11',
+        name: '用户列表',
+        title: '用户列表',
+        path: 'user/users',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 3,
+        isaction: 1,
+        meta: {title: "用户列表", icon: ""},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "6",
+        roleId: "1",
+        menuId: "12",
+        pid: '1',
+        name: '角色',
+        title: '角色',
+        path: 'role',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 2,
+        isaction: 0,
+        meta: {title: "角色", icon: ""},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "7",
+        roleId: "1",
+        menuId: "121",
+        pid: '12',
+        name: '添加角色',
+        title: '添加角色',
+        path: 'role/addrole',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 1,
+        isaction: 1,
+        meta: {title: "添加角色", icon: ""},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "8",
+        roleId: "1",
+        menuId: "122",
+        pid: '12',
+        name: '编辑角色',
+        title: '编辑角色',
+        path: 'role/editrole',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 2,
+        isaction: 1,
+        meta: {title: "编辑角色", icon: ""},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "9",
+        roleId: "1",
+        menuId: "123",
+        pid: '12',
+        name: '角色列表',
+        title: '角色列表',
+        path: 'role/roles',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 3,
+        isaction: 1,
+        meta: {title: "角色列表", icon: ""},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "11",
+        roleId: "1",
+        menuId: "1241",
+        pid: "12",
+        name: '编辑角色权限',
+        title: '编辑角色权限',
+        path: 'role/userpermission',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 1,
+        isaction: 1,
+        meta: {title: "编辑角色权限", icon: ""},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "121",
+        roleId: "1",
+        menuId: "124",
+        pid: "12",
+        name: '获取我已有的菜单',
+        title: '获取我已有的菜单',
+        path: 'role/defaultcheck',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 5,
+        isaction: 1,
+        meta: {title: "获取我已有的菜单", icon: ""},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "12",
+        roleId: "1",
+        menuId: "125",
+        pid: "12",
+        name: '删除角色',
+        title: '删除角色',
+        path: 'delrole',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 4,
+        isaction: 1,
+        meta: {title: "删除角色", icon: ""},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "13",
+        roleId: "1",
+        menuId: "13",
+        pid: "1",
+        name: '菜单',
+        title: '菜单',
+        path: 'menu',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 3,
+        isaction: 0,
+        meta: {title: "菜单", icon: ""},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "14",
+        roleId: "1",
+        menuId: "131",
+        pid: '13',
+        name: '添加菜单',
+        title: '添加菜单',
+        path: 'menu/addmenu',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 1,
+        isaction: 1,
+        meta: {title: "添加菜单", icon: ""},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "15",
+        roleId: "1",
+        menuId: "132",
+        pid: '13',
+        name: '编辑菜单',
+        title: '编辑菜单',
+        path: 'menu/editmenu',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 2,
+        isaction: 1,
+        meta: {title: "编辑菜单", icon: ""},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "16",
+        roleId: "1",
+        menuId: "133",
+        pid: '13',
+        name: '菜单列表',
+        title: '菜单列表',
+        path: 'menu/menus',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 3,
+        isaction: 1,
+        meta: {title: "菜单列表", icon: ""},
+        isDeleted: 0
+    },
+    {
+        rolemenuId: "17",
+        roleId: "1",
+        menuId: "134",
+        pid: '13',
+        name: '删除菜单',
+        title: '删除菜单',
+        path: 'menu/delmenu',
+        icon: "",
+        display: 1,
+        hidden: false,
+        sort: 4,
+        isaction: 1,
+        meta: {title: "删除菜单", icon: ""},
+        isDeleted: 0
+    },
+];
+initData()
+async function initData() {
+    for (const ele of initDatas) {
+        const exist = await rolemenuRepository.findOne({ menuId: ele.menuId });
+        if (!exist) await new rolemenuRepository(ele).save()
+    }
+}
+export default rolemenuRepository;
